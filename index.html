@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="ecommerce.css">
+</head>
+<body>
+    <h1>reyka store</h1>
+    <div class="container">
+        <div id="saldo">Saldo: </div>
+        <div id="card-list"></div>
+    </div>
+    <script>
+        const products = [
+            {
+                img: "stoneisland.jpg",
+                name: "stoneisland",
+                price: 1000000,
+            },
+            {
+                img: "prung.jpg",
+                name: "prung",
+                price: 700000,
+            },
+            {
+                img: "mypride.jpg",
+                name: "mypride",
+                price: 800000,
+            },
+            {
+                img: "jb.jpg",
+                name: "jb",
+                price: 900000,
+            },
+            {
+                img:"chmb.jpg",
+                name: "chmb",
+                price: 1000000
+            },
+            {
+                img:"adidas.jpg",
+                name: "adidas",
+                price: 1200000
+            },
+            {
+                img:"clarks.jpg",
+                name: "clarks",
+                price: 1500000
+            },
+            {
+                img: "vondutch.jpg",
+                name: "vondutch",
+                price: 2000000
+            }
+        ];
+
+        let saldo = 100000000;
+
+        function formatRupiah(amount) {
+            return new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(amount);
+        }
+
+        function renderProducts() {
+            document.getElementById("saldo").textContent = `Saldo: ${formatRupiah(saldo)}`;
+            document.getElementById("card-list").innerHTML = products.map((item, index) => {
+                return `
+                    <div class="card">
+                        <img src="${item.img}" alt="${item.name}" />
+                        <div class="card-body">
+                            <h2>${item.name}</h2>
+                            <p>${item.desc}</p>
+                            <h3 style="color: red">${formatRupiah(item.price)}</h3>
+                            <button class="btn-primary beli" data-index="${index}" data-harga="${item.price}">Beli</button>
+                        </div>
+                    </div>
+                `;
+            }).join("");
+
+            document.querySelectorAll(".btn-primary").forEach((button) => {
+                button.addEventListener("click", () => {
+                    const index = Number(button.dataset.index);
+                    const price = Number(button.dataset.harga);
+
+                    if (saldo >= price) {
+                        saldo -= price;
+                        renderProducts();
+                        alert(`Anda berhasil membeli ${products[index].name}. Sisa saldo: ${formatRupiah(saldo)}`);
+                    } else {
+                        alert("Saldo anda tidak cukup.");
+                    }
+                });
+            });
+        }
+
+        renderProducts();
+    </script>
+</body>
+</html>
